@@ -8,12 +8,15 @@ from player import Player
 def main():
 
     dt = 0.0  # Delta time
-
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
     clock = pygame.time.Clock()
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable)
     # Create player at center of screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    
+    
 
     while True:
         dt = clock.tick(60) / 1000.0  # Get delta time in seconds
@@ -21,11 +24,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            
-        player.update(dt)
-    
-        screen.fill((0, 0, 0))  # Fill screen with black
-        player.draw(screen)  # Draw player
+        
+        screen.fill((0, 0, 0))  # Clear the screen
+
+        updatable.update(dt)
+
+        for thing in drawable:
+             thing.draw(screen)
+
+        #player.draw(screen)  # Draw player
         pygame.display.flip()   # Update the display
 
     pygame.time.Clock().tick(60)  # Limit to 60 FPS
